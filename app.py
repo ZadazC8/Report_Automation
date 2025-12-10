@@ -199,7 +199,7 @@ with st.sidebar:
     lang_code = 'ES' if idioma_seleccionado == "Español" else 'EN'
     st.divider()
     st.markdown("### Aprobación")
-    PIN_SECRET = "LAB123" 
+    PIN_SECRET = st.secrets["PIN_SECRETO"]
     password = st.text_input("PIN de Firma", type="password")
     autorizado = False
     nombre_aprobador = "" 
@@ -343,4 +343,5 @@ if uploaded_file is not None:
                 st.download_button("DESCARGAR PDF", data=pdf, file_name=f"{file_clean}.pdf", mime="application/pdf", key='btn_descargar_pdf', use_container_width=True)
 
 else:
+
     st.info("Por favor, carga el archivo Excel desde la barra lateral izquierda para comenzar.")
