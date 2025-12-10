@@ -232,7 +232,7 @@ st.markdown(f"""
 with st.expander("Datos del Pedido", expanded=True):
     c1, c2, c3, c4 = st.columns(4)
     with c1: consecutivo = st.text_input("Consecutivo Informe", value="")
-    with c2: orden = st.text_input("Número de Pedido", value="")
+    with c2: orden = st.text_input("Ref. Pedido / Orden", value="")
     with c3: fecha_prueba = st.date_input("Fecha Prueba", date.today())
     with c4: fecha_emision = st.date_input("Fecha Emisión", date.today())
     c5, c6 = st.columns([2, 2])
@@ -345,3 +345,4 @@ if uploaded_file is not None:
 else:
 
     st.info("Por favor, carga el archivo Excel desde la barra lateral izquierda para comenzar.")
+
