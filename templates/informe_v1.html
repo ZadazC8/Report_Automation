@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        @page {
+            size: A4;
+            margin: 3.5cm 2cm 3cm 2cm;
+            @top-center { content: element(header); width: 100%; }
+            @bottom-center { content: element(footer); width: 100%; }
+        }
+        body { font-family: 'Segoe UI', sans-serif; font-size: 10pt; color: #333; line-height: 1.3; }
+
+        /* HEADER & FOOTER */
+        div.header { position: running(header); width: 100%; border-bottom: 2px solid #002f6c; padding-bottom: 10px; }
+        div.footer { position: running(footer); width: 100%; text-align: center; font-size: 8pt; color: #666; border-top: 1px solid #ccc; padding-top: 10px; }
+        .header-table { width: 100%; border: none; }
+        .header-table td { vertical-align: middle; border: none; }
+        .logo-img { height: 90px; width: auto; object-fit: contain; }
+        
+        /* ESTILOS DE TABLAS (LIMPIO) */
+        .table-nameplate, .results { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-bottom: 20px; 
+            border-top: 2px solid #002f6c; 
+            font-size: 9pt;
+        }
+        
+        .table-nameplate th, .results th { 
+            background-color: #f8f9fa; 
+            color: #000; 
+            font-weight: bold; 
+            border: 1px solid #e0e0e0;
+            border-bottom: 2px solid #002f6c; 
+            padding: 8px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        
+        .table-nameplate td, .results td { 
+            border: 1px solid #e0e0e0; 
+            padding: 6px; 
+            text-align: center; 
+            color: #333;
+        }
+
+        .table-nameplate tr.total-row td {
+            background-color: #f0f4f8; 
+            color: #002f6c; 
+            font-weight: bold;
+            border-top: 1px solid #002f6c;
+        }
+
+        /* INFO CONTAINER */
+        .info-container { 
+            border: 1px solid #e0e0e0; 
+            border-left: 4px solid #002f6c; 
+            padding: 10px 15px; 
+            margin: 20px 0; 
+            background: #fff; 
+        }
+        .info-row { display: flex; justify-content: space-between; margin-bottom: 5px; }
+        .label { font-weight: bold; color: #444; width: 160px; font-size: 9pt; text-transform: uppercase; }
+        
+        /* TÍTULOS */
+        h3 { 
+            color: #222; 
+            font-size: 11pt; 
+            font-weight: bold;
+            margin-bottom: 10px; 
+            margin-top: 25px; 
+            border-bottom: 1px solid #ccc; 
+            padding-bottom: 3px; 
+        }
+        
+        .std-text { font-size: 10pt; color: #333; }
+        .note-text { font-size: 9pt; color: #666; font-style: italic; margin-top: 2px; margin-bottom: 15px; }
+        
+        .status-pass { color: #155724; font-weight: bold; }
+        .status-fail { color: #721c24; font-weight: bold; }
+        .final-note { margin-top: 40px; margin-bottom: 40px; text-align: justify; font-size: 10pt; line-height: 1.4; padding: 10px; border-left: 3px solid #ccc; font-style: italic; color: #555; background: #fafafa; }
+
+        /* FIRMAS */
+        .signature-section { margin-top: 50px; display: flex; justify-content: center; page-break-inside: avoid; }
+        .sig-container { width: 350px; text-align: center; }
+        .sig-image-container { height: 120px; display: flex; align-items: flex-end; justify-content: center; margin-bottom: 5px; }
+        .sig-line { border-bottom: 1px solid #000; width: 100%; margin-bottom: 5px; }
+
+        .draft-mark { color: #ccc; font-size: 30pt; font-weight: bold; text-align: center; border: 3px dashed #ccc; padding: 20px; margin-top: 30px; text-transform: uppercase; }
+        .end-marker { text-align: center; font-size: 8pt; color: #888; margin-top: 40px; border-top: 1px dashed #ccc; padding-top: 5px; width: 100%; }
+
+        /* ÍNDICE */
+        .index-container { background-color: #fff; padding: 10px 0; margin-bottom: 30px; border: 1px solid #eee; }
+        .index-list { list-style-type: none; padding: 0; margin: 0; padding-left: 10px; }
+        .index-list li { margin-bottom: 6px; border-bottom: 1px dotted #eee; }
+        .index-list a { text-decoration: none; color: #333; font-size: 9pt; display: flex; justify-content: space-between; width: 100%; }
+        .index-list a:hover { color: #002f6c; font-weight: bold; }
+        
+        thead { display: table-header-group; }
+        tr { page-break-inside: avoid; }
+        .num { font-family: 'Consolas', monospace; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <table class="header-table">
+            <tr>
+                <td style="width:20%"><img src="assets/logo_empresa.png" class="logo-img"></td>
+                <td style="width:55%; text-align:center; color:#222; font-weight:bold; font-size: 11pt;">
+                    ELECTRICOS INTERNACIONAL SAS<br>
+                    <span style="color:#222; font-size: 10pt;">{{ t.titulo_pdf }}</span><br>
+                    {{ info.Consecutivo }}
+                </td>
+                <td style="width:25%; text-align:right; font-size:8pt; color: #555;">
+                    <strong>{{ t.codigo }}:</strong> CFB F 011<br><strong>{{ t.version }}:</strong> 10<br><strong>{{ t.fecha }}:</strong> 2023-02-13
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="footer">
+        <strong>ELECTRICOS INTERNACIONAL S.A.S.</strong><br>
+        Street 17 #. 42 A - 69. - 432 2950. BOGOTA - COLOMBIA<br>
+        {{ t.pagina }} <span style="content: counter(page)"></span>
+    </div>
+
+    <div class="info-container">
+        <div class="info-row"><span class="label">{{ t.target }}:</span><span>{{ info.Target }}</span></div>
+        <div class="info-row"><span class="label">{{ t.cliente }}:</span><span>{{ info.Cliente }}</span></div>
+        <div class="info-row"><span class="label">{{ t.orden }}:</span><span>{{ info.Orden }}</span></div>
+        <div class="info-row"><span class="label">{{ t.direccion }}:</span><span>{{ info.Direccion }}</span></div>
+        <div class="info-row"><span class="label">{{ t.procedimiento }}:</span><span>{{ info.Procedimiento }}</span></div>
+        <div class="info-row"><span class="label">{{ t.ensayo_realizado }}:</span><span>{{ info.Ensayo }}</span></div>
+        <div class="info-row"><span class="label">{{ t.realizado_por }}:</span><span>{{ info.Operador }}</span></div>
+        <div class="info-row"><span class="label">{{ t.fecha_test }}:</span><span>{{ info.FechaPrueba }}</span></div>
+        <div class="info-row"><span class="label">{{ t.fecha_emision }}:</span><span>{{ info.FechaEmision }}</span></div>
+    </div>
+
+    <div style="font-size:8pt; font-style:italic; text-align:center; margin-bottom:20px; color:#666;">
+        {{ t.disclaimer }}
+    </div>
+
+    <h3 style="margin-top: 0;">{{ t.indice }}</h3>
+    <div class="index-container">
+        <ul class="index-list">
+            <li><a href="#table1"><span>TABLE 1: {{ t.tabla1_titulo }}</span></a></li>
+            <li><a href="#table2"><span>TABLE 2: {{ t.tabla2_titulo }}</span></a></li>
+            <li><a href="#table3"><span>TABLE 3: {{ t.tabla3_titulo }}</span></a></li>
+            {% for grupo in datos %}
+                <li><a href="#detail-{{ loop.index }}"><span>TABLE {{ loop.index + 3 }}: {{ t.titulo_tecnico_tabla }} {{ grupo.corriente_nominal }} A. - {{ grupo.voltaje }} kV.</span></a></li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <h3 id="table1">1. {{ t.tabla1_titulo }}</h3>
+    <table class="table-nameplate">
+        <thead>
+            <tr>
+                <th rowspan="2" style="width:25%; vertical-align: middle;">{{ t.t1_id }}</th>
+                <th colspan="4">{{ t.t1_placa }}</th>
+            </tr>
+            <tr>
+                <th style="width:30%;">{{ t.t1_tipo }}</th>
+                <th style="width:15%;">{{ t.t1_corriente }}</th>
+                <th style="width:15%;">{{ t.t1_voltaje }}</th>
+                <th style="width:15%;">{{ t.t1_cant }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for fila in datos %}
+            <tr>
+                <td>{{ fila.identificacion }}</td>
+                <td>{{ fila.tipo }}</td>
+                <td>{{ fila.corriente_nominal }}</td>
+                <td>{{ fila.voltaje }}</td>
+                <td style="font-weight:bold;">{{ fila.cantidad }}</td>
+            </tr>
+            {% endfor %}
+            <tr class="total-row">
+                <td colspan="4" style="text-align: right; padding-right: 10px;">{{ t.t1_total }}:</td>
+                <td><strong>{{ info.TotalMuestras }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="note-text">{{ t.nota_muestras }}</div>
+    <div style="text-align:center; font-size:8pt; margin-bottom:15px; color:#444;"><strong>TABLE 1</strong></div>
+
+    <h3 id="table2">2. {{ t.tabla2_titulo }}</h3>
+    <table class="table-nameplate">
+        <thead>
+            <tr>
+                <th style="width:5%;">{{ t.t2_item }}</th>
+                <th style="width:25%;">{{ t.t2_equipo }}</th>
+                <th style="width:15%;">{{ t.t2_marca }}</th>
+                <th style="width:15%;">{{ t.t2_modelo }}</th>
+                <th style="width:15%;">{{ t.t2_serial }}</th>
+                <th style="width:25%;">{{ t.t2_cert }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for eq in equipos %}
+            <tr>
+                <td>{{ eq.Item }}</td>
+                <td style="text-align:left;">{{ eq.EQUIPMENT }}</td>
+                <td>{{ eq.BRAND }}</td>
+                <td>{{ eq.MODEL }}</td>
+                <td>{{ eq['SERIAL NUMBER'] }}</td>
+                <td>{{ eq['CALIBRATION CERTIFICATE'] }}</td>
+            </tr>
+            {% else %}
+            <tr><td colspan="6" style="color:red;">{{ t.no_equipos }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div style="text-align:center; font-size:8pt; margin-bottom:20px; color:#444;"><strong>TABLE 2</strong></div>
+
+    <h3 id="table3">3. {{ t.tabla3_titulo }}</h3>
+    <table class="results">
+        <thead>
+            <tr>
+                <th>{{ t.ref }}</th><th>{{ t.cant }}</th><th>{{ t.rango }}</th>
+                <th>{{ t.promedio }}</th><th>{{ t.max }}</th><th>{{ t.min }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for grupo in datos %}
+            <tr>
+                <td style="text-align:left;">{{ grupo.nombre }}</td>
+                <td>{{ grupo.cantidad }}</td>
+                <td class="num">{{ grupo.rango_txt }}</td>
+                <td class="num">{{ "%.3f"|format(grupo.promedio) }}</td>
+                <td class="num">{{ "%.3f"|format(grupo.maximo) }}</td>
+                <td class="num">{{ "%.3f"|format(grupo.minimo) }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3 style="margin-top: 20px;">{{ t.posibles_resultados }}</h3>
+    <div class="std-text" style="border: 1px solid #eee; padding: 10px; background-color: #fafafa;">
+        <div style="margin-bottom: 5px;"><strong style="color: green;">{{ t.txt_pass }} {{ info.Procedimiento }}.</strong></div>
+        <div><strong style="color: red;">{{ t.txt_fail }} {{ info.Procedimiento }}.</strong></div>
+    </div>
+
+    <h3>{{ t.condiciones }}</h3>
+    <div class="std-text" style="margin-bottom: 20px;">
+        <div style="margin-bottom: 5px;"><strong>{{ t.temp }}:</strong> 20 - 25 °C</div>
+        <div><strong>{{ t.hum }}:</strong> 45 - 55 %</div>
+    </div>
+
+    <div style="page-break-after: always;"></div>
+
+    <h3>{{ t.detalles_titulo }}</h3>
+    {% for grupo in datos %}
+        <h4 id="detail-{{ loop.index }}" style="margin-top:25px; margin-bottom:5px; color:#444; font-size: 10pt;">
+            {{ t.titulo_tecnico_tabla }} {{ grupo.corriente_nominal }} A. - {{ grupo.voltaje }} kV.
+        </h4>
+        <table class="results">
+            <thead>
+                <tr>
+                    <th width="30%">{{ t.muestra }}</th>
+                    <th width="40%">{{ t.lectura }}</th>
+                    <th width="30%">{{ t.resultado }}</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in grupo.datos_detalle %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td class="num">{{ "%.3f"|format(item.valor) }}</td>
+                    <td class="{% if item.estado == 'PASS' %}status-pass{% else %}status-fail{% endif %}">{{ item.estado }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <div style="text-align:center; font-size:8pt; margin-bottom:20px; color:#444;"><strong>TABLE {{ loop.index + 3 }}</strong></div>
+    {% endfor %}
+
+    <div class="final-note">
+        {{ t.nota_final }} {{ info.Procedimiento }}.
+    </div>
+
+    {% if info.Autorizado %}
+        <div class="signature-section">
+            <div class="sig-container">
+                <div class="sig-image-container">
+                    <img src="assets/firma_jefe.png" style="max-height: 120px; max-width: 350px;">
+                </div>
+                <div class="sig-line"></div>
+                <div style="font-weight: bold; text-transform: uppercase;">{{ info.Aprobador }}</div>
+                <div style="font-size: 9pt; color: #666; font-style: italic;">{{ info.CargoAprobador }}</div>
+            </div>
+        </div>
+    {% else %}
+        <div class="draft-mark">
+            {{ t.borrador }}<br>
+            <span style="font-size: 12pt; font-weight: normal;">{{ t.no_valido }}</span>
+        </div>
+    {% endif %}
+
+    <div class="end-marker">
+        {{ t.fin_doc }}
+    </div>
+
+</body>
+</html>
